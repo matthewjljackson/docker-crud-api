@@ -1,27 +1,27 @@
-const express = require('express')
-const cors = require('cors')
+const express = require('express');
+const cors = require('cors');
+const mysql = require('mysql2');
 
-const app = express()
+const db = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  database: 'new_schema',
+  password: 'password',
+});
 
-app.use(cors())
+const app = express();
 
-app.get('/', (req, res) => {
-  res.json([
-    {
-      "id":"1",
-      "title":"Book Review: The Name of the Wind"
-    },
-    {
-      "id":"2",
-      "title":"Game Review: Pokemon Brillian Diamond"
-    },
-    {
-      "id":"3",
-      "title":"Show Review: Alice in Borderland"
-    }
-  ])
-})
+app.use(cors());
+
+app.get('/', (_req, res) => {
+  db.query('SELECT * FROM Review', (err, results) => {
+    console.log({ err, results });
+    if (err) res.status(500).json(err);
+
+    res.status(200).json(results);
+  });
+});
 
 app.listen(4000, () => {
-  console.log('listening for requests on port 4000')
-})
+  console.log('listening for requests on port 4000');
+});
