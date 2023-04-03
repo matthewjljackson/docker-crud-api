@@ -2,6 +2,8 @@ FROM node:19-alpine
 
 WORKDIR /app
 
+RUN npm i -g ts-node
+
 COPY package.json .
 COPY package-lock.json .
 
@@ -11,4 +13,4 @@ COPY . .
 
 EXPOSE 4000
 
-CMD ["node", "app.js"]
+CMD ["npx","ts-node", "app.ts"]
